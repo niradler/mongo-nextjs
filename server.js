@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const next = require('next')
 const { parse } = require('url')
@@ -6,7 +7,7 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-const Collections = require('./server/controllers/Collections');
+const Home = require('./server/controllers/Home');
 
 const main = async () => {
 try {
@@ -15,7 +16,7 @@ try {
 
       server.get('*', async  (req, res) => {
         const parsedUrl = parse(req.url, true);
-        const collections = await Collections.getCollections();
+        const collections = await Home.getTags();
         console.log({collections})
         return app.render(req, res, parsedUrl.pathname, {collections}) //handle(req, res,'/',{test:"test"})
       })

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-let _db = null;
 let _isConnected;
 
 const connect = () => {
@@ -10,17 +9,19 @@ const connect = () => {
   }
   return mongoose.connect(process.env.MONGO_URI)
     .then(db => { 
-        _db=db
         _isConnected = db.connections[0].readyState;
-      return _db;
     });
 };
 
 const getMongoClient = async () => {
-    if (_isConnected) {
-        return db
+    try {
+        
+        if (!_isConnected) await connect();
+            const { db } = mongoose.connection;
+            return db;
+    } catch (error) {
+        throw error
     }
-    return connect();
 }
 
 module.exports = {
