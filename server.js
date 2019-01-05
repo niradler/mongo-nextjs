@@ -41,7 +41,7 @@ const main = async() => {
     })
 
     server.get('*', async(req, res) => {     
-      return res.views.render();
+      return res.views.handle();
     })
 
     const PORT = process.env.PORT || 3000;
